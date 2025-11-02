@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>行人运动模拟系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #eee;
+        }
+        
+        .container {
+            display: flex;
+            height: 100vh;
+        }
+        
+        .sidebar {
+            width: 320px;
+            background: #16213e;
+            padding: 20px;
+            overflow-y: auto;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+        }
+        
+        .main-canvas {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #0f3460;
+        }
+        
+        canvas {
+            background: #fff;
+            cursor: crosshair;
+            margin: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        
+        h2 {
+            color: #e94560;
+            margin-bottom: 15px;
+            font-size: 18px;
+            border-bottom: 2px solid #e94560;
+            padding-bottom: 8px;
+        }
+        
+        .control-group {
+            margin-bottom: 25px;
+            background: #1a1a2e;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #aaa;
+            font-size: 13px;
+        }
+        
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #0f3460;
+            border-radius: 5px;
+            background: #16213e;
+            color: #eee;
+            font-size: 13px;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #e94560;
+        }
+        
+        button {
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: none;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(233, 69, 96, 0.4);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #e94560 0%, #c13854 100%);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #00d4aa 0%, #00a884 100%);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #ffa500 0%, #ff8c00 100%);
+        }
+        
+        .stats {
+            background: #1a1a2e;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #0f3460;
+        }
+        
+        .stat-label {
+            color: #aaa;
+        }
+        
+        .stat-value {
+            color: #e94560;
+            font-weight: bold;
+        }
+        
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            padding: 20px;
+            background: #16213e;
+            flex-wrap: wrap;
+        }
+        
+        .toolbar button {
+            flex: 1;
+            min-width: 120px;
+        }
+        
+        .mode-selector {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .mode-btn {
+            flex: 1;
+            padding: 8px;
+            font-size: 11px;
+            background: #0f3460;
+        }
+        
+        .mode-btn.active {
+            background: #e94560;
+        }
+        
+        .legend {
+            background: #1a1a2e;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2>🎯 场景配置</h2>
+            
+            <div class="control-group">
+                <label>场景尺寸 (米)</label>
+                <input type="number" id="scene-width" value="50" placeholder="宽度">
+                <input type="number" id="scene-height" value="50" placeholder="高度">
+            </div>
+            
+            <div class="control-group">
+                <label>编辑模式</label>
+                <div class="mode-selector">
+                    <button class="mode-btn active" onclick="setMode('wall')">墙体</button>
+                    <button class="mode-btn" onclick="setMode('exit')">出口</button>
+                    <button class="mode-btn" onclick="setMode('spawn')">生成区</button>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <label>行人数量</label>
+                <input type="number" id="pedestrian-count" value="100" min="1" max="500">
+                
+                <label>行人密度模式</label>
+                <select id="density-mode">
+                    <option value="uniform">均匀分布</option>
+                    <option value="clustered">聚集分布</option>
+                    <option value="custom">自定义区域</option>
+                </select>
+            </div>
+            
+            <h2>⚡ 突发事件</h2>
+            
+            <div class="control-group">
+                <label>事件类型</label>
+                <select id="event-type">
+                    <option value="fire">火灾</option>
+                    <option value="shooting">枪击</option>
+                    <option value="entrance_close">关闭出口</option>
+                    <option value="entrance_open">开启出口</option>
+                </select>
+                
+                <label>影响半径 (米)</label>
+                <input type="number" id="event-radius" value="10" min="1" max="30">
+                
+                <label>强度 (0-1)</label>
+                <input type="range" id="event-intensity" min="0" max="1" step="0.1" value="1">
+                <span id="intensity-value">1.0</span>
+                
+                <button class="btn-warning" onclick="triggerEvent()">📍 点击地图触发事件</button>
+            </div>
+            
+            <h2>📊 实时统计</h2>
+            
+            <div class="stats" id="stats">
+                <div class="stat-item">
+                    <span class="stat-label">当前行人数</span>
+                    <span class="stat-value" id="stat-pedestrians">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">仿真时间</span>
+                    <span class="stat-value" id="stat-time">0s</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">恐慌人数</span>
+                    <span class="stat-value" id="stat-panic">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">平均速度</span>
+                    <span class="stat-value" id="stat-speed">0 m/s</span>
+                </div>
+            </div>
+            
+            <div class="legend">
+                <h3 style="margin-bottom: 10px; font-size: 14px;">图例</h3>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #4CAF50;"></div>
+                    <span>正常行人</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #ff6b6b;"></div>
+                    <span>恐慌行人</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #2196F3;"></div>
+                    <span>出口</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #666;"></div>
+                    <span>墙体/障碍物</span>
+                </div>
+            </div>
+            
+            <div class="control-group">
+                <button class="btn-primary" onclick="saveScenario()">💾 保存场景</button>
+                <button class="btn-success" onclick="exportToUnity()">🎮 导出Unity</button>
+            </div>
+        </div>
+        
+        <div class="main-canvas">
+            <div class="toolbar">
+                <button class="btn-success" onclick="startSimulation()">▶️ 开始仿真</button>
+                <button class="btn-warning" onclick="pauseSimulation()">⏸️ 暂停</button>
+                <button class="btn-danger" onclick="stopSimulation()">⏹️ 停止</button>
+                <button class="btn-primary" onclick="clearCanvas()">🗑️ 清空</button>
+            </div>
+            <canvas id="simulation-canvas" width="1200" height="800"></canvas>
+        </div>
+    </div>
+    
+    <script>
+        const canvas = document.getElementById('simulation-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        let currentMode = 'wall';
+        let isDrawing = false;
+        let currentPoints = [];
+        let walls = [];
+        let exits = [];
+        let spawnAreas = [];
+        let eventMode = false;
+        
+        let animationId = null;
+        const API_BASE = 'http://localhost:5000/api';
+        
+        // 设置编辑模式
+        function setMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+        
+        // Canvas事件处理
+        canvas.addEventListener('mousedown', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            if (eventMode) {
+                triggerEventAtPosition(x, y);
+                eventMode = false;
+                return;
+            }
+            
+            isDrawing = true;
+            currentPoints.push({x, y});
+            
+            if (currentMode === 'exit') {
+                exits.push({x, y, width: 2});
+                isDrawing = false;
+                currentPoints = [];
+                redrawCanvas();
+            }
+        });
+        
+        canvas.addEventListener('mousemove', (e) => {
+            if (!isDrawing || currentMode === 'exit') return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            redrawCanvas();
+            
+            // 绘制当前线条
+            ctx.strokeStyle = '#e94560';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            currentPoints.forEach((point, index) => {
+                if (index === 0) ctx.moveTo(point.x, point.y);
+                else ctx.lineTo(point.x, point.y);
+            });
+            ctx.lineTo(x, y);
+            ctx.stroke();
+        });
+        
+        canvas.addEventListener('mouseup', () => {
+            isDrawing = false;
+        });
+        
+        canvas.addEventListener('dblclick', () => {
+            if (currentMode === 'wall' && currentPoints.length > 2) {
+                walls.push([...currentPoints]);
+                currentPoints = [];
+                redrawCanvas();
+            } else if (currentMode === 'spawn' && currentPoints.length > 2) {
+                spawnAreas.push([...currentPoints]);
+                currentPoints = [];
+                redrawCanvas();
+            }
+        });
+        
+        // 重绘画布
+        function redrawCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // 绘制墙体
+            walls.forEach(wall => {
+                ctx.strokeStyle = '#333';
+                ctx.fillStyle = '#666';
+                ctx.lineWidth = 5;
+                ctx.beginPath();
+                wall.forEach((point, index) => {
+                    if (index === 0) ctx.moveTo(point.x, point.y);
+                    else ctx.lineTo(point.x, point.y);
+                });
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+            });
+            
+            // 绘制出口
+            exits.forEach(exit => {
+                ctx.fillStyle = '#2196F3';
+                ctx.fillRect(exit.x - 20, exit.y - 5, 40, 10);
+                ctx.fillStyle = '#fff';
+                ctx.font = '12px Arial';
+                ctx.fillText('EXIT', exit.x - 15, exit.y + 3);
+            });
+            
+            // 绘制生成区域
+            spawnAreas.forEach(area => {
+                ctx.strokeStyle = '#00d4aa';
+                ctx.fillStyle = 'rgba(0, 212, 170, 0.1)';
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]);
+                ctx.beginPath();
+                area.forEach((point, index) => {
+                    if (index === 0) ctx.moveTo(point.x, point.y);
+                    else ctx.lineTo(point.x, point.y);
+                });
+                ctx.closePath();
+                ctx.fill();
+                ctx.stroke();
+                ctx.setLineDash([]);
+            });
+        }
+        
+        // 场景坐标转换
+        function canvasToWorld(canvasX, canvasY) {
+            const sceneWidth = parseFloat(document.getElementById('scene-width').value);
+            const sceneHeight = parseFloat(document.getElementById('scene-height').value);
+            return {
+                x: (canvasX / canvas.width) * sceneWidth,
+                y: (canvasY / canvas.height) * sceneHeight
+            };
+        }
+        
+        function worldToCanvas(worldX, worldY) {
+            const sceneWidth = parseFloat(document.getElementById('scene-width').value);
+            const sceneHeight = parseFloat(document.getElementById('scene-height').value);
+            return {
+                x: (worldX / sceneWidth) * canvas.width,
+                y: (worldY / sceneHeight) * canvas.height
+            };
+        }
+        
+        // API调用
+        async function startSimulation() {
+            const config = {
+                width: parseFloat(document.getElementById('scene-width').value),
+                height: parseFloat(document.getElementById('scene-height').value),
+                obstacles: walls.map(wall => ({
+                    vertices: wall.map(p => {
+                        const world = canvasToWorld(p.x, p.y);
+                        return [world.x, world.y];
+                    })
+                })),
+                exits: exits.map(exit => {
+                    const world = canvasToWorld(exit.x, exit.y);
+                    return {
+                        position: [world.x, world.y],
+                        width: exit.width
+                    };
+                }),
+                pedestrian_spawn: {
+                    count: parseInt(document.getElementById('pedestrian-count').value),
+                    areas: spawnAreas.map(area => {
+                        const points = area.map(p => canvasToWorld(p.x, p.y));
+                        return {
+                            x_min: Math.min(...points.map(p => p.x)),
+                            x_max: Math.max(...points.map(p => p.x)),
+                            y_min: Math.min(...points.map(p => p.y)),
+                            y_max: Math.max(...points.map(p => p.y))
+                        };
+                    })
+                }
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE}/start_simulation`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(config)
+                });
+                const data = await response.json();
+                console.log('Simulation started:', data);
+                startAnimation();
+            } catch (error) {
+                console.error('Error starting simulation:', error);
+                alert('启动仿真失败: ' + error.message);
+            }
+        }
+        
+        async function pauseSimulation() {
+            try {
+                await fetch(`${API_BASE}/pause_simulation`, {method: 'POST'});
+                stopAnimation();
+            } catch (error) {
+                console.error('Error pausing simulation:', error);
+            }
+        }
+        
+        async function stopSimulation() {
+            try {
+                await fetch(`${API_BASE}/stop_simulation`, {method: 'POST'});
+                stopAnimation();
+                redrawCanvas();
+            } catch (error) {
+                console.error('Error stopping simulation:', error);
+            }
+        }
+        
+        function clearCanvas() {
+            walls = [];
+            exits = [];
+            spawnAreas = [];
+            currentPoints = [];
+            redrawCanvas();
+        }
+        
+        async function triggerEvent() {
+            eventMode = true;
+            alert('请在地图上点击选择事件发生位置');
+        }
+        
+        async function triggerEventAtPosition(canvasX, canvasY) {
+            const world = canvasToWorld(canvasX, canvasY);
+            const eventData = {
+                event_type: document.getElementById('event-type').value,
+                position: [world.x, world.y],
+                radius: parseFloat(document.getElementById('event-radius').value),
+                intensity: parseFloat(document.getElementById('event-intensity').value)
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE}/trigger_event`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(eventData)
+                });
+                const data = await response.json();
+                console.log('Event triggered:', data);
+                
+                // 绘制事件标记
+                ctx.fillStyle = 'rgba(255, 0, 0, 0.3)';
+                ctx.beginPath();
+                ctx.arc(canvasX, canvasY, 50, 0, Math.PI * 2);
+                ctx.fill();
+            } catch (error) {
+                console.error('Error triggering event:', error);
+            }
+        }
+        
+        // 动画循环
+        function startAnimation() {
+            function animate() {
+                updateSimulationState();
+                animationId = requestAnimationFrame(animate);
+            }
+            animate();
+        }
+        
+        function stopAnimation() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+            }
+        }
+        
+        async function updateSimulationState() {
+            try {
+                const response = await fetch(`${API_BASE}/get_state`);
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    redrawCanvas();
+                    
+                    // 绘制行人
+                    data.pedestrians.forEach(ped => {
+                        const canvas_pos = worldToCanvas(ped.position[0], ped.position[1]);
+                        
+                        // 根据状态选择颜色
+                        let color = '#4CAF50'; // 正常
+                        if (ped.state === 'panic') color = '#ff6b6b'; // 恐慌
+                        
+                        ctx.fillStyle = color;
+                        ctx.beginPath();
+                        ctx.arc(canvas_pos.x, canvas_pos.y, 5, 0, Math.PI * 2);
+                        ctx.fill();
+                        
+                        // 绘制速度方向
+                        const vel_mag = Math.sqrt(ped.velocity[0]**2 + ped.velocity[1]**2);
+                        if (vel_mag > 0.1) {
+                            ctx.strokeStyle = color;
+                            ctx.lineWidth = 2;
+                            ctx.beginPath();
+                            ctx.moveTo(canvas_pos.x, canvas_pos.y);
+                            const dir_x = canvas_pos.x + (ped.velocity[0] / vel_mag) * 10;
+                            const dir_y = canvas_pos.y + (ped.velocity[1] / vel_mag) * 10;
+                            ctx.lineTo(dir_x, dir_y);
+                            ctx.stroke();
+                        }
+                    });
+                    
+                    // 更新统计信息
+                    document.getElementById('stat-pedestrians').textContent = data.statistics.current_pedestrians;
+                    document.getElementById('stat-time').textContent = data.time.toFixed(1) + 's';
+                    document.getElementById('stat-panic').textContent = data.statistics.panic_count;
+                    document.getElementById('stat-speed').textContent = data.statistics.average_speed.toFixed(2) + ' m/s';
+                }
+            } catch (error) {
+                console.error('Error updating state:', error);
+            }
+        }
+        
+        async function saveScenario() {
+            const name = prompt('请输入场景名称:', 'my_scenario');
+            if (!name) return;
+            
+            const config = {
+                name: name,
+                width: parseFloat(document.getElementById('scene-width').value),
+                height: parseFloat(document.getElementById('scene-height').value),
+                walls: walls,
+                exits: exits,
+                spawnAreas: spawnAreas
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE}/save_scenario`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(config)
+                });
+                const data = await response.json();
+                alert('场景保存成功!');
+            } catch (error) {
+                console.error('Error saving scenario:', error);
+                alert('保存失败: ' + error.message);
+            }
+        }
+        
+        async function exportToUnity() {
+            try {
+                const response = await fetch(`${API_BASE}/export_unity`, {
+                    method: 'POST'
+                });
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'simulation_data.json';
+                a.click();
+                alert('数据已导出,可导入Unity使用!');
+            } catch (error) {
+                console.error('Error exporting:', error);
+                alert('导出失败: ' + error.message);
+            }
+        }
+        
+        // 强度滑块更新
+        document.getElementById('event-intensity').addEventListener('input', (e) => {
+            document.getElementById('intensity-value').textContent = e.target.value;
+        });
+        
+        // 初始化
+        redrawCanvas();
+    </script>
+</body>
+</html>

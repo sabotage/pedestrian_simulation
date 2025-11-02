@@ -1,0 +1,1036 @@
+{
+  "name": "城市公园 (Urban Park)",
+  "name_en": "Urban Park",
+  "description": "开放空间，湖泊、树木、活动区。人数500-2000，模拟活动结束大规模撤离、突发雷雨、恐慌事件。",
+  "description_en": "Open space with lake, trees, event area. 500-2000 pedestrians. Simulates mass exodus after events, sudden rain, panic.",
+  "recommended_pedestrians": 1500,
+  "environment": {
+    "width": 100,
+    "height": 100,
+    "walls": [
+      [
+        [
+          0,
+          0
+        ],
+        [
+          100,
+          0
+        ]
+      ],
+      [
+        [
+          100,
+          0
+        ],
+        [
+          100,
+          100
+        ]
+      ],
+      [
+        [
+          100,
+          100
+        ],
+        [
+          0,
+          100
+        ]
+      ],
+      [
+        [
+          0,
+          100
+        ],
+        [
+          0,
+          0
+        ]
+      ]
+    ],
+    "entrances": [
+      {
+        "position": [
+          50,
+          2
+        ],
+        "radius": 2.5,
+        "flow_rate": 5.0,
+        "active": true
+      },
+      {
+        "position": [
+          2,
+          50
+        ],
+        "radius": 2.5,
+        "flow_rate": 4.0,
+        "active": true
+      },
+      {
+        "position": [
+          98,
+          50
+        ],
+        "radius": 2.5,
+        "flow_rate": 4.0,
+        "active": true
+      },
+      {
+        "position": [
+          25,
+          98
+        ],
+        "radius": 2.0,
+        "flow_rate": 3.0,
+        "active": true
+      },
+      {
+        "position": [
+          75,
+          98
+        ],
+        "radius": 2.0,
+        "flow_rate": 3.0,
+        "active": true
+      },
+      {
+        "position": [
+          50,
+          13
+        ],
+        "radius": 2.0,
+        "flow_rate": 6.0,
+        "active": true
+      }
+    ],
+    "exits": [
+      {
+        "position": [
+          50,
+          2
+        ],
+        "radius": 3.0,
+        "active": true
+      },
+      {
+        "position": [
+          2,
+          50
+        ],
+        "radius": 3.0,
+        "active": true
+      },
+      {
+        "position": [
+          98,
+          50
+        ],
+        "radius": 3.0,
+        "active": true
+      },
+      {
+        "position": [
+          25,
+          98
+        ],
+        "radius": 2.5,
+        "active": true
+      },
+      {
+        "position": [
+          75,
+          98
+        ],
+        "radius": 2.5,
+        "active": true
+      }
+    ],
+    "hazards": [],
+    "roads": [
+      {
+        "points": [
+          [
+            50,
+            0
+          ],
+          [
+            50,
+            100
+          ]
+        ],
+        "width": 4,
+        "comment": "Main vertical road (north-south)"
+      },
+      {
+        "points": [
+          [
+            0,
+            50
+          ],
+          [
+            100,
+            50
+          ]
+        ],
+        "width": 4,
+        "comment": "Main horizontal road (east-west)"
+      },
+      {
+        "points": [
+          [
+            0,
+            25
+          ],
+          [
+            40,
+            25
+          ]
+        ],
+        "width": 3,
+        "comment": "West section road"
+      },
+      {
+        "points": [
+          [
+            60,
+            25
+          ],
+          [
+            100,
+            25
+          ]
+        ],
+        "width": 3,
+        "comment": "East section road"
+      },
+      {
+        "points": [
+          [
+            0,
+            75
+          ],
+          [
+            40,
+            75
+          ]
+        ],
+        "width": 3,
+        "comment": "West section road"
+      },
+      {
+        "points": [
+          [
+            60,
+            75
+          ],
+          [
+            100,
+            75
+          ]
+        ],
+        "width": 3,
+        "comment": "East section road"
+      },
+      {
+        "points": [
+          [
+            25,
+            0
+          ],
+          [
+            25,
+            40
+          ]
+        ],
+        "width": 3,
+        "comment": "West vertical connector"
+      },
+      {
+        "points": [
+          [
+            25,
+            60
+          ],
+          [
+            25,
+            100
+          ]
+        ],
+        "width": 3,
+        "comment": "West vertical connector"
+      },
+      {
+        "points": [
+          [
+            75,
+            0
+          ],
+          [
+            75,
+            40
+          ]
+        ],
+        "width": 3,
+        "comment": "East vertical connector"
+      },
+      {
+        "points": [
+          [
+            75,
+            60
+          ],
+          [
+            75,
+            100
+          ]
+        ],
+        "width": 3,
+        "comment": "East vertical connector"
+      },
+      {
+        "points": [
+          [
+            25,
+            25
+          ],
+          [
+            50,
+            25
+          ]
+        ],
+        "width": 3,
+        "comment": "Northwest to center connector"
+      },
+      {
+        "points": [
+          [
+            50,
+            25
+          ],
+          [
+            75,
+            25
+          ]
+        ],
+        "width": 3,
+        "comment": "Center to northeast connector"
+      },
+      {
+        "points": [
+          [
+            25,
+            75
+          ],
+          [
+            50,
+            75
+          ]
+        ],
+        "width": 3,
+        "comment": "Southwest to center connector"
+      },
+      {
+        "points": [
+          [
+            50,
+            75
+          ],
+          [
+            75,
+            75
+          ]
+        ],
+        "width": 3,
+        "comment": "Center to southeast connector"
+      },
+      {
+        "points": [
+          [
+            25,
+            25
+          ],
+          [
+            25,
+            50
+          ]
+        ],
+        "width": 3,
+        "comment": "Northwest vertical connector"
+      },
+      {
+        "points": [
+          [
+            25,
+            50
+          ],
+          [
+            25,
+            75
+          ]
+        ],
+        "width": 3,
+        "comment": "Southwest vertical connector"
+      },
+      {
+        "points": [
+          [
+            75,
+            25
+          ],
+          [
+            75,
+            50
+          ]
+        ],
+        "width": 3,
+        "comment": "Northeast vertical connector"
+      },
+      {
+        "points": [
+          [
+            75,
+            50
+          ],
+          [
+            75,
+            75
+          ]
+        ],
+        "width": 3,
+        "comment": "Southeast vertical connector"
+      }
+    ],
+    "decorations": [
+      {
+        "type": "tree",
+        "position": [
+          10,
+          10
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          15,
+          10
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          10,
+          15
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          15,
+          15
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          35,
+          10
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          40,
+          10
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          35,
+          15
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          40,
+          15
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          60,
+          10
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          65,
+          10
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          60,
+          15
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          65,
+          15
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          85,
+          10
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          90,
+          10
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          85,
+          15
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          90,
+          15
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          10,
+          85
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          15,
+          85
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          10,
+          90
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          15,
+          90
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          35,
+          85
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          40,
+          85
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          35,
+          90
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          40,
+          90
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          60,
+          85
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          65,
+          85
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          60,
+          90
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          65,
+          90
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          85,
+          85
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          90,
+          85
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          85,
+          90
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          90,
+          90
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          10,
+          35
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          10,
+          40
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          10,
+          60
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          10,
+          65
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          90,
+          35
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          90,
+          40
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          90,
+          60
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          90,
+          65
+        ]
+      },
+      {
+        "type": "pond",
+        "position": [
+          12,
+          12
+        ],
+        "radius": 5
+      },
+      {
+        "type": "pond",
+        "position": [
+          88,
+          12
+        ],
+        "radius": 5
+      },
+      {
+        "type": "pond",
+        "position": [
+          12,
+          88
+        ],
+        "radius": 5
+      },
+      {
+        "type": "pond",
+        "position": [
+          88,
+          88
+        ],
+        "radius": 5
+      },
+      {
+        "type": "tree",
+        "position": [
+          32,
+          12
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          36,
+          12
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          64,
+          12
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          68,
+          12
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          32,
+          88
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          36,
+          88
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          64,
+          88
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          68,
+          88
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          12,
+          32
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          12,
+          36
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          12,
+          64
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          12,
+          68
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          88,
+          32
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          88,
+          36
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          88,
+          64
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          88,
+          68
+        ]
+      },
+      {
+        "type": "building",
+        "position": [
+          32,
+          32
+        ],
+        "width": 6,
+        "height": 6
+      },
+      {
+        "type": "building",
+        "position": [
+          68,
+          32
+        ],
+        "width": 6,
+        "height": 6
+      },
+      {
+        "type": "building",
+        "position": [
+          32,
+          68
+        ],
+        "width": 6,
+        "height": 6
+      },
+      {
+        "type": "building",
+        "position": [
+          68,
+          68
+        ],
+        "width": 6,
+        "height": 6
+      },
+      {
+        "type": "tree",
+        "position": [
+          30,
+          55
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          33,
+          58
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          37,
+          55
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          63,
+          55
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          67,
+          58
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          70,
+          55
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          30,
+          42
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          33,
+          45
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          37,
+          42
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          63,
+          42
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          67,
+          45
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          70,
+          42
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          55,
+          30
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          58,
+          33
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          55,
+          37
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          42,
+          30
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          45,
+          33
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          42,
+          37
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          55,
+          63
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          58,
+          67
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          55,
+          70
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          42,
+          63
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          45,
+          67
+        ]
+      },
+      {
+        "type": "tree",
+        "position": [
+          42,
+          70
+        ]
+      }
+    ]
+  }
+}

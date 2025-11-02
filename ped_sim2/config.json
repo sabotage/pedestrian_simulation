@@ -1,0 +1,66 @@
+{
+  "_comment": "Configuration file for pedestrian simulation parameters",
+  
+  "simulation": {
+    "timestep": 0.1,
+    "max_simulation_time": 300.0,
+    "random_seed": null
+  },
+  
+  "pedestrian_defaults": {
+    "max_speed": 1.3,
+    "radius": 0.3,
+    "mass": 80.0,
+    "speed_variation": 0.2
+  },
+  
+  "social_force": {
+    "relaxation_time": 0.5,
+    "pedestrian_repulsion": {
+      "A": 2000.0,
+      "B": 0.08
+    },
+    "wall_repulsion": {
+      "A": 2000.0,
+      "B": 0.08
+    },
+    "fluctuation_strength": 0.3
+  },
+  
+  "pathfinding": {
+    "cell_size": 0.5,
+    "path_simplification_threshold": 0.9
+  },
+  
+  "panic": {
+    "speed_multiplier": 0.5,
+    "repulsion_multiplier": 1.0,
+    "decay_rate": 0.1
+  },
+  
+  "visualization": {
+    "canvas_size": 800,
+    "background_color": "#fafafa",
+    "wall_color": "#333333",
+    "entrance_color": "#10b981",
+    "exit_color": "#ef4444",
+    "pedestrian_calm_color": "#667eea",
+    "pedestrian_panic_color": "#dc2626",
+    "show_velocity_vectors": true,
+    "update_rate_fps": 10
+  },
+  
+  "events": {
+    "fire_default_radius": 5.0,
+    "shooting_default_radius": 10.0,
+    "enable_auto_pathfinding_update": true
+  },
+  
+  "export": {
+    "output_directory": "exports",
+    "unity_wall_height": 3.0,
+    "unity_pedestrian_height": 0.9,
+    "include_metadata": true,
+    "compress_trajectories": false
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "scenarios": [
+    {
+      "id": "busy_intersection",
+      "name": "Busy Intersection (Enhanced)",
+      "name_en": "Busy Intersection (Enhanced)",
+      "description": "80×80m realistic intersection with main roads for cars, sidewalks, zebra crossings, and traffic lights (20s cycle). Pedestrians can only walk on sidewalks and cross at green lights. Cars travel 10x faster than pedestrians. Recommended: 500 pedestrians.",
+      "description_en": "80×80m realistic intersection with main roads for cars, sidewalks, zebra crossings, and traffic lights (20s cycle). Pedestrians can only walk on sidewalks and cross at green lights. Cars travel 10x faster than pedestrians. Recommended: 500 pedestrians.",
+      "recommended_pedestrians": 500
+    },
+    {
+      "id": "downtown_street",
+      "name": "Downtown Street",
+      "name_en": "Downtown Street",
+      "description": "Two-way street with pedestrian crossings, bus stops, and subway exits. 500-1500 people. Simulates traffic signal failures, road construction, fires, and other emergencies.",
+      "description_en": "Two-way street with pedestrian crossings, bus stops, and subway exits. 500-1500 people. Simulates traffic signal failures, road construction, fires, and other emergencies.",
+      "recommended_pedestrians": 1000
+    },
+    {
+      "id": "campus",
+      "name": "University Campus",
+      "name_en": "University Campus",
+      "description": "Main road network with teaching buildings, dormitories, library, and cafeteria. 500-3000 people. Simulates class rush hours, fire evacuation, and main gate closures.",
+      "description_en": "Main road network with teaching buildings, dormitories, library, and cafeteria. 500-3000 people. Simulates class rush hours, fire evacuation, and main gate closures.",
+      "recommended_pedestrians": 2000
+    },
+    {
+      "id": "hospital",
+      "name": "Hospital",
+      "name_en": "Hospital",
+      "description": "Emergency building, inpatient building, and outpatient building. 500-1000 people. Simulates fire evacuation, elevator outages, and emergency corridor blockages.",
+      "description_en": "Emergency building, inpatient building, and outpatient building. 500-1000 people. Simulates fire evacuation, elevator outages, and emergency corridor blockages.",
+      "recommended_pedestrians": 800
+    },
+    {
+      "id": "shopping_mall",
+      "name": "Shopping Mall",
+      "name_en": "Shopping Mall",
+      "description": "Multi-story mall with shops, rest areas, and atrium. 1000-5000 people. Simulates fires, escalator outages, and panic events.",
+      "description_en": "Multi-story mall with shops, rest areas, and atrium. 1000-5000 people. Simulates fires, escalator outages, and panic events.",
+      "recommended_pedestrians": 3000
+    },
+    {
+      "id": "urban_park",
+      "name": "Urban Park",
+      "name_en": "Urban Park",
+      "description": "Open space with lake, trees, and activity areas. 500-2000 people. Simulates mass evacuation after events, sudden storms, and panic events.",
+      "description_en": "Open space with lake, trees, and activity areas. 500-2000 people. Simulates mass evacuation after events, sudden storms, and panic events.",
+      "recommended_pedestrians": 1500
+    }
+  ]
+}

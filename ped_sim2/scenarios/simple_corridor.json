@@ -1,0 +1,21 @@
+{
+  "name": "Simple Corridor",
+  "description": "Basic corridor scenario with one entrance and one exit",
+  "environment": {
+    "width": 30.0,
+    "height": 10.0,
+    "walls": [
+      {"start": [0, 0], "end": [30, 0]},
+      {"start": [30, 0], "end": [30, 10]},
+      {"start": [30, 10], "end": [0, 10]},
+      {"start": [0, 10], "end": [0, 0]}
+    ],
+    "entrances": [
+      {"position": [2, 5], "radius": 1.5, "flow_rate": 2.0}
+    ],
+    "exits": [
+      {"position": [28, 5], "radius": 1.5}
+    ]
+  },
+  "events": []
+}

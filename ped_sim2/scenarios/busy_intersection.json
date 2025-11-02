@@ -1,0 +1,56 @@
+{
+  "name": "繁忙十字路口 (简化版)",
+  "name_en": "Busy Intersection (Simplified)",
+  "description": "简化的十字路口：4条人行横道，交通灯控制（每10秒切换）。行人只在横道上行走并遵守交通灯。推荐200行人。",
+  "description_en": "Simplified intersection: 4 pedestrian crossings, traffic lights (10s cycle). Pedestrians walk only on crossings and follow lights. 200 pedestrians recommended.",
+  "recommended_pedestrians": 200,
+  "environment": {
+    "width": 80,
+    "height": 80,
+    "walls": [
+      [[0, 0], [80, 0]],
+      [[80, 0], [80, 80]],
+      [[80, 80], [0, 80]],
+      [[0, 80], [0, 0]]
+    ],
+    "entrances": [
+      {"position": [5, 40], "radius": 2.0, "flow_rate": 2.0, "active": true},
+      {"position": [75, 40], "radius": 2.0, "flow_rate": 2.0, "active": true},
+      {"position": [40, 5], "radius": 2.0, "flow_rate": 2.0, "active": true},
+      {"position": [40, 75], "radius": 2.0, "flow_rate": 2.0, "active": true}
+    ],
+    "exits": [
+      {"position": [75, 30], "radius": 2.5, "active": true},
+      {"position": [5, 50], "radius": 2.5, "active": true},
+      {"position": [30, 75], "radius": 2.5, "active": true},
+      {"position": [50, 5], "radius": 2.5, "active": true}
+    ],
+    "hazards": [],
+    "roads": [
+      {"points": [[0, 30], [80, 30]], "width": 4, "type": "pedestrian", "color": "#90EE90"},
+      {"points": [[0, 50], [80, 50]], "width": 4, "type": "pedestrian", "color": "#90EE90"},
+      {"points": [[30, 0], [30, 80]], "width": 4, "type": "pedestrian", "color": "#90EE90"},
+      {"points": [[50, 0], [50, 80]], "width": 4, "type": "pedestrian", "color": "#90EE90"}
+    ],
+    "pedestrianLanes": [],
+    "crossingLanes": [
+      {"start": [35, 30], "end": [45, 30], "width": 4, "trafficLightId": "tl_ew_1", "type": "zebra"},
+      {"start": [35, 50], "end": [45, 50], "width": 4, "trafficLightId": "tl_ew_2", "type": "zebra"},
+      {"start": [30, 35], "end": [30, 45], "width": 4, "trafficLightId": "tl_ns_1", "type": "zebra"},
+      {"start": [50, 35], "end": [50, 45], "width": 4, "trafficLightId": "tl_ns_2", "type": "zebra"}
+    ],
+    "trafficLights": [
+      {"id": "tl_ns_1", "position": [30, 33], "orientation": "vertical", "controls": "north-south", "state": "red", "cycle": 20},
+      {"id": "tl_ns_2", "position": [50, 33], "orientation": "vertical", "controls": "north-south", "state": "red", "cycle": 20},
+      {"id": "tl_ew_1", "position": [33, 30], "orientation": "horizontal", "controls": "east-west", "state": "green", "cycle": 20},
+      {"id": "tl_ew_2", "position": [33, 50], "orientation": "horizontal", "controls": "east-west", "state": "green", "cycle": 20}
+    ],
+    "carLanes": [],
+    "vehicles": [],
+    "decorations": [
+      {"type": "building", "position": [15, 15], "width": 20, "height": 20},
+      {"type": "building", "position": [65, 15], "width": 20, "height": 20},
+      {"type": "building", "position": [15, 65], "width": 20, "height": 20}
+    ]
+  }
+}

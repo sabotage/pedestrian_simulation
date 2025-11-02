@@ -1,0 +1,47 @@
+{
+  "name": "示例场景",
+  "width": 40,
+  "height": 40,
+  "obstacles": [
+    {
+      "vertices": [
+        [
+          0,
+          0
+        ],
+        [
+          40,
+          0
+        ],
+        [
+          40,
+          40
+        ],
+        [
+          0,
+          40
+        ]
+      ]
+    }
+  ],
+  "exits": [
+    {
+      "position": [
+        20,
+        0
+      ],
+      "width": 3.0
+    }
+  ],
+  "pedestrian_spawn": {
+    "count": 50,
+    "areas": [
+      {
+        "x_min": 5,
+        "x_max": 35,
+        "y_min": 5,
+        "y_max": 35
+      }
+    ]
+  }
+}

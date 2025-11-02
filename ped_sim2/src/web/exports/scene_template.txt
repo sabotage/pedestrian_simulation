@@ -1,0 +1,187 @@
+using UnityEngine;
+using System.Collections.Generic;
+using System.IO;
+
+public class PedestrianSimulationPlayer : MonoBehaviour
+{
+    [System.Serializable]
+    public class SimulationData
+    {
+        public Metadata metadata;
+        public Environment environment;
+        public List<PedestrianTrajectory> trajectories;
+        public List<SimEvent> events;
+    }
+    
+    [System.Serializable]
+    public class Metadata
+    {
+        public string export_time;
+        public float duration;
+        public int total_pedestrians;
+        public int frame_count;
+        public float timestep;
+    }
+    
+    [System.Serializable]
+    public class Environment
+    {
+        public Dimensions dimensions;
+        public List<Wall> walls;
+        public List<Zone> entrances;
+        public List<Zone> exits;
+        public List<Hazard> hazards;
+    }
+    
+    [System.Serializable]
+    public class Dimensions
+    {
+        public float width;
+        public float height;
+    }
+    
+    [System.Serializable]
+    public class Wall
+    {
+        public Vector3Data start;
+        public Vector3Data end;
+        public float height;
+    }
+    
+    [System.Serializable]
+    public class Zone
+    {
+        public Vector3Data position;
+        public float radius;
+        public bool active;
+    }
+    
+    [System.Serializable]
+    public class Hazard
+    {
+        public Vector3Data position;
+        public float radius;
+        public string type;
+        public float intensity;
+    }
+    
+    [System.Serializable]
+    public class Vector3Data
+    {
+        public float x, y, z;
+        public Vector3 ToVector3() => new Vector3(x, y, z);
+    }
+    
+    [System.Serializable]
+    public class PedestrianTrajectory
+    {
+        public int id;
+        public List<Keyframe> keyframes;
+    }
+    
+    [System.Serializable]
+    public class Keyframe
+    {
+        public float time;
+        public Vector3Data position;
+        public Vector3Data velocity;
+        public float panic_level;
+    }
+    
+    [System.Serializable]
+    public class SimEvent
+    {
+        public float time;
+        public string type;
+    }
+    
+    public string simulationDataPath;
+    public GameObject pedestrianPrefab;
+    public GameObject wallPrefab;
+    public float playbackSpeed = 1.0f;
+    
+    private SimulationData simData;
+    private Dictionary<int, GameObject> pedestrianObjects = new Dictionary<int, GameObject>();
+    private float currentTime = 0f;
+    private bool isPlaying = false;
+    
+    void Start()
+    {
+        LoadSimulationData();
+        BuildEnvironment();
+    }
+    
+    void LoadSimulationData()
+    {
+        string jsonData = File.ReadAllText(simulationDataPath);
+        simData = JsonUtility.FromJson<SimulationData>(jsonData);
+    }
+    
+    void BuildEnvironment()
+    {
+        // Create walls
+        foreach (var wall in simData.environment.walls)
+        {
+            Vector3 start = wall.start.ToVector3();
+            Vector3 end = wall.end.ToVector3();
+            Vector3 center = (start + end) / 2;
+            float length = Vector3.Distance(start, end);
+            
+            GameObject wallObj = Instantiate(wallPrefab, center, Quaternion.identity);
+            wallObj.transform.localScale = new Vector3(0.2f, wall.height, length);
+            wallObj.transform.LookAt(end);
+        }
+    }
+    
+    void Update()
+    {
+        if (!isPlaying) return;
+        
+        currentTime += Time.deltaTime * playbackSpeed;
+        
+        foreach (var trajectory in simData.trajectories)
+        {
+            UpdatePedestrian(trajectory);
+        }
+    }
+    
+    void UpdatePedestrian(PedestrianTrajectory trajectory)
+    {
+        // Find current keyframe
+        Keyframe current = null, next = null;
+        
+        for (int i = 0; i < trajectory.keyframes.Count - 1; i++)
+        {
+            if (trajectory.keyframes[i].time <= currentTime && 
+                trajectory.keyframes[i + 1].time >= currentTime)
+            {
+                current = trajectory.keyframes[i];
+                next = trajectory.keyframes[i + 1];
+                break;
+            }
+        }
+        
+        if (current == null) return;
+        
+        // Create pedestrian if doesn't exist
+        if (!pedestrianObjects.ContainsKey(trajectory.id))
+        {
+            GameObject ped = Instantiate(pedestrianPrefab);
+            pedestrianObjects[trajectory.id] = ped;
+        }
+        
+        // Interpolate position
+        float t = (currentTime - current.time) / (next.time - current.time);
+        Vector3 position = Vector3.Lerp(
+            current.position.ToVector3(),
+            next.position.ToVector3(),
+            t
+        );
+        
+        pedestrianObjects[trajectory.id].transform.position = position;
+    }
+    
+    public void Play() => isPlaying = true;
+    public void Pause() => isPlaying = false;
+    public void Reset() => currentTime = 0f;
+}
